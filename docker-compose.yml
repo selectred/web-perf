@@ -1,0 +1,66 @@
+
+services:
+  
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin12345
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=web_metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:12.2.0-17282025910-ubuntu
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=London3z!
+    depends_on:
+      - influxdb
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  mcp-server:
+    build:
+      context: ./mcp_server
+      dockerfile: Dockerfile
+    container_name: mcp-server
+    restart: unless-stopped
+    ports:
+      - "4000:4000"          # Expose MCP server port
+    environment:
+      - NODE_ENV=production
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
+      - INFLUX_ORG=my-org
+      - INFLUX_BUCKET=web_metrics
+    depends_on:
+      - influxdb
+
+  cron-runner:
+    build:
+      context: ./mcp_server
+      dockerfile: Dockerfile
+    container_name: cron-runner
+    restart: unless-stopped
+    command: ["npm", "run", "start-runner"]
+    environment:
+      - NODE_ENV=production
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
+      - INFLUX_ORG=my-org
+      - INFLUX_BUCKET=web_metrics
+    depends_on:
+      - influxdb
+volumes:
+  influxdb-data:
+  grafana-data:

@@ -1,0 +1,142 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "Synthetic Web Monitoring",
+    "tags": ["synthetic", "webperf"],
+    "timezone": "browser",
+    "schemaVersion": 37,
+    "version": 1,
+    "refresh": "1m",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "BBC TTI & Full Load",
+        "gridPos": {"x": 0,"y": 0,"w": 12,"h": 8},
+        "datasource": "influxdb-1",
+        "targets": [
+          {
+            "query": "from(bucket: \"<web_metrics>\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"https://www.bbc.co.uk\" and (r._field == \"time_to_interactive\" or r._field == \"time_to_full_load\"))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [],
+            "thresholds": {"mode": "absolute","steps":[{"color":"green","value":null}]}
+          },
+          "overrides": [
+            {
+              "matcher": {"id": "byName","options": "time_to_interactive"},
+              "properties": [{"id": "color","value":"blue"},{"id":"custom.lineStyle","value":"solid"}]
+            },
+            {
+              "matcher": {"id": "byName","options": "time_to_full_load"},
+              "properties": [{"id": "color","value":"orange"},{"id":"custom.lineStyle","value":"dashed"}]
+            }
+          ]
+        },
+        "yaxes": [
+          {"format": "s","label": "Seconds","logBase": 1,"min": 0},
+          {"show": false}
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Google TTI & Full Load",
+        "gridPos": {"x": 12,"y": 0,"w": 12,"h": 8},
+        "datasource": "influxdb-1",
+        "targets": [
+          {
+            "query": "from(bucket: \"<web_metrics>\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"https://www.google.co.uk\" and (r._field == \"time_to_interactive\" or r._field == \"time_to_full_load\"))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          },
+          "overrides": [
+            {
+              "matcher": {"id": "byName","options": "time_to_interactive"},
+              "properties": [{"id": "color","value":"blue"},{"id":"custom.lineStyle","value":"solid"}]
+            },
+            {
+              "matcher": {"id": "byName","options": "time_to_full_load"},
+              "properties": [{"id": "color","value":"orange"},{"id":"custom.lineStyle","value":"dashed"}]
+            }
+          ]
+        },
+        "yaxes": [
+          {"format": "s","label": "Seconds","logBase": 1,"min": 0},
+          {"show": false}
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Sky TTI & Full Load",
+        "gridPos": {"x": 0,"y": 8,"w": 12,"h": 8},
+        "datasource": "influxdb-1",
+        "targets": [
+          {
+            "query": "from(bucket: \"<web_metrics>\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"https://www.sky.co.uk\" and (r._field == \"time_to_interactive\" or r._field == \"time_to_full_load\"))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          },
+          "overrides": [
+            {
+              "matcher": {"id": "byName","options": "time_to_interactive"},
+              "properties": [{"id": "color","value":"blue"},{"id":"custom.lineStyle","value":"solid"}]
+            },
+            {
+              "matcher": {"id": "byName","options": "time_to_full_load"},
+              "properties": [{"id": "color","value":"orange"},{"id":"custom.lineStyle","value":"dashed"}]
+            }
+          ]
+        },
+        "yaxes": [
+          {"format": "s","label": "Seconds","logBase": 1,"min": 0},
+          {"show": false}
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Overall TTI & Full Load",
+        "gridPos": {"x": 12,"y": 8,"w": 12,"h": 8},
+        "datasource": "influxdb-1",
+        "targets": [
+          {
+            "query": "from(bucket: \"<web_metrics>\") |> range(start: -1h) |> filter(fn: (r) => r._measurement =~ /bbc|google|sky/ and (r._field == \"time_to_interactive\" or r._field == \"time_to_full_load\"))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          },
+          "overrides": [
+            {
+              "matcher": {"id": "byName","options": "time_to_interactive"},
+              "properties": [{"id": "color","value":"blue"},{"id":"custom.lineStyle","value":"solid"}]
+            },
+            {
+              "matcher": {"id": "byName","options": "time_to_full_load"},
+              "properties": [{"id": "color","value":"orange"},{"id":"custom.lineStyle","value":"dashed"}]
+            }
+          ]
+        },
+        "yaxes": [
+          {"format": "s","label": "Seconds","logBase": 1,"min": 0},
+          {"show": false}
+        ]
+      }
+    ]
+  }
+}

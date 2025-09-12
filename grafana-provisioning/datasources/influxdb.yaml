@@ -1,0 +1,16 @@
+apiVersion: 1
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    org: my-org
+    database: web_metrics
+    isDefault: true
+    editable: true
+    jsonData:
+      defaultBucket: web_metrics
+      organization: my-org
+      version: Flux
+    secureJsonData:
+      token: Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
