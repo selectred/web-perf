@@ -1,6 +1,6 @@
 
 services:
-  
+
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
@@ -8,11 +8,11 @@ services:
       - "8086:8086"
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=admin12345
-      - DOCKER_INFLUXDB_INIT_ORG=my-org
-      - DOCKER_INFLUXDB_INIT_BUCKET=web_metrics
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USERNAME:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_ORG:-my-org}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET:-web_metrics}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN}
     volumes:
       - influxdb-data:/var/lib/influxdb
 
@@ -22,8 +22,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=London3z!
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     depends_on:
       - influxdb
     volumes:
@@ -36,13 +36,13 @@ services:
     container_name: mcp-server
     restart: unless-stopped
     ports:
-      - "4000:4000"          # Expose MCP server port
+      - "4000:4000"
     environment:
       - NODE_ENV=production
       - INFLUX_URL=http://influxdb:8086
-      - INFLUX_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
-      - INFLUX_ORG=my-org
-      - INFLUX_BUCKET=web_metrics
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - INFLUX_ORG=${INFLUX_ORG:-my-org}
+      - INFLUX_BUCKET=${INFLUX_BUCKET:-web_metrics}
     depends_on:
       - influxdb
 
@@ -56,9 +56,9 @@ services:
     environment:
       - NODE_ENV=production
       - INFLUX_URL=http://influxdb:8086
-      - INFLUX_TOKEN=Svd97rkAn5omIhsdVa5l4fNIfhavUw237rqzwvxOIy_HuGQWW7keHf8Y6hLZKgvu13a7tWKQo9JQ1hQCcQicxg==
-      - INFLUX_ORG=my-org
-      - INFLUX_BUCKET=web_metrics
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - INFLUX_ORG=${INFLUX_ORG:-my-org}
+      - INFLUX_BUCKET=${INFLUX_BUCKET:-web_metrics}
     depends_on:
       - influxdb
 volumes:
