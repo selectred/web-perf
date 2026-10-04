@@ -76,4 +76,6 @@ npm run dev
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
+
+For monitors that alert you when a journey fails, and run inside your own network, see [Continuum Community Edition](https://github.com/selectred/continuum-community).
